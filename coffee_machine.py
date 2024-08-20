@@ -35,7 +35,7 @@ class CoffeeMachine:
             tuple: _message to print and True If resources are enough otherwise False_
         """
         if user_drink != "espresso":
-            for resource in resources[0:-1]:
+            for resource in resources:
 
                 if resources[resource] < MENU[user_drink]["ingredients"][resource]:
                     return f"Sorry! There's not enough {resource.title()}!", False
@@ -43,7 +43,7 @@ class CoffeeMachine:
                 else:
                     return f"Let's make {user_drink}", True
         else:
-            for resource in resources[0:-1:1]:
+            for resource in resources:
 
                 if resources[resource] < MENU[user_drink]["ingredients"][resource]:
                     return f"Sorry! There's not enough {resource.title()}!", False
@@ -51,7 +51,7 @@ class CoffeeMachine:
                 else:
                     return f"Let's make {user_drink}", True
 
-    def process_coins(self,no_quarters: int, no_dimes: int, no_nickels: int, no_pennies: int)-> float:
+    def process_coins(self,no_quarters: int, no_dimes: int, no_nickles: int, no_pennies: int)-> float:
         """_Calculate total value of coins_
 
         Args:
@@ -63,7 +63,7 @@ class CoffeeMachine:
         Returns:
             float: _Total value of coins_
         """
-        return (self.COINS["quarters"] * no_quarters) + (self.COINS["dimes"] * no_dimes) + (self.COINS["nickels"] * no_nickels) + (self.COINS["pennies"] * no_pennies)
+        return (self.COINS["quarters"] * no_quarters) + (self.COINS["dimes"] * no_dimes) + (self.COINS["nickles"] * no_nickles) + (self.COINS["pennies"] * no_pennies)
 
 
     def check_enough_coins(self, total_coins: float, user_drink: str)-> tuple:
@@ -83,19 +83,19 @@ class CoffeeMachine:
         else:
             change = total_coins - MENU[user_drink]['cost']
             return "Here is ${:.2f} in change.".format(change), True
-    def aks_for_coins(self)-> tuple:
+    def aks_for_coins(self, user_drink: str)-> tuple:
         """_Ask the user for coins_
 
         Returns:
             tuple: _Number of quarters, dimes, nickels and pennies_
         """
-        print("Please insert coins:")
-        quarters = input("How many quarters ? ")
-        dimes = input("How many dimes ? ")
-        nickels = input("How many nickels ? ")
-        pennies = input("How many pennies ? ")
+        print(f"Please insert coins: Cost ${MENU[user_drink]['cost']}")
+        quarters = int(input("How many quarters ? "))
+        dimes = int(input("How many dimes ? "))
+        nickles = int(input("How many nickels ? "))
+        pennies = int(input("How many pennies ? "))
 
-        return quarters, dimes, nickels, pennies
+        return quarters, dimes, nickles, pennies
 
     def update_resources(self, resources: dict, user_drink: str)-> dict:
         """_Update available resources after making a drink_
@@ -107,37 +107,45 @@ class CoffeeMachine:
         Returns:
             dict: _Updated resources_
         """
-        for resource in resources[:-1]:
-            resources[resource] = resources[resource] - MENU[user_drink][resource]
+        if user_drink != "espresso":
+            for resource in resources:
+                if resource != "money":
+                    resources[resource] = resources[resource] - MENU[user_drink]["ingredients"][resource]
+        else:
+            resources["water"] -= MENU[user_drink]["ingredients"]["water"]
+            resources["coffee"] -= MENU[user_drink]["ingredients"]["coffee"]
+
         resources["money"] += MENU[user_drink]["cost"]
         return resources
 
     def make_coffee(self):
 
-        is_making_coffee = True
+
         not_end = True
         while not_end:
             #Ask for which drink
             chosen_drink = self.prompt()
+            is_making_coffee = True
             while is_making_coffee:
-                if chosen_drink == "report":
+                if chosen_drink.lower() == "report":
                     #Show report
                     print(f"{self.resources_str(resources)}")
+                    is_making_coffee = False
                 elif chosen_drink == "end":
                     is_making_coffee = False
                     not_end = False
                 else:
                     if self.check_resources_availability(resources= resources, user_drink= chosen_drink)[1]:
                         #Ask for coins
-                        no_quarters, no_dimes, no_nickels, no_pennies =  self.aks_for_coins()
+                        no_quarters, no_dimes, no_nickles, no_pennies =  self.aks_for_coins(user_drink= chosen_drink)
                         #Calculate total coins
-                        total_coins = self.process_coins(no_quarters, no_dimes, no_nickels, no_pennies)
+                        total_coins = self.process_coins(no_quarters, no_dimes, no_nickles, no_pennies)
                         if self.check_enough_coins(total_coins, chosen_drink)[1]:
                             #if user gave enough money
                             print(f"{self.check_enough_coins(total_coins, chosen_drink)[0]}")
                             print(f"Here is your {chosen_drink} {coffee_logo} Enjoy!")
                             self.update_resources(resources, user_drink= chosen_drink)
-
+                            is_making_coffee = False
                         else:
                             #If not enough coins
                             print(f"{self.check_enough_coins(total_coins, chosen_drink)[0]}")
