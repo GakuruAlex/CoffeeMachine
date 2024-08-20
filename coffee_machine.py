@@ -9,7 +9,7 @@ class CoffeeMachine:
         Returns:
             str: _choice of drink_
         """
-        user_drink =input("What would you like? (espresso/latte/cappuccino):")
+        user_drink =input("What would you like? (espresso/latte/cappuccino): ")
         return user_drink
 
     def resources_str(self,resources: dict) -> str:
@@ -113,11 +113,12 @@ class CoffeeMachine:
         return resources
 
     def make_coffee(self):
+
         is_making_coffee = True
         not_end = True
         while not_end:
             #Ask for which drink
-            chosen_drink =self.prompt()
+            chosen_drink = self.prompt()
             while is_making_coffee:
                 if chosen_drink == "report":
                     #Show report
