@@ -94,18 +94,53 @@ class CoffeeMachine:
         dimes = input("How many dimes ? ")
         nickels = input("How many nickels ? ")
         pennies = input("How many pennies ? ")
-        
+
         return quarters, dimes, nickels, pennies
 
+    def update_resources(self, resources: dict, user_drink: str)-> dict:
+        """_Update available resources after making a drink_
+
+        Args:
+            resources (dict): _Current resources_
+            user_drink (str): _Chosen drink_
+
+        Returns:
+            dict: _Updated resources_
+        """
+        for resource in resources[:-1]:
+            resources[resource] = resources[resource] - MENU[user_drink][resource]
+        resources["money"] += MENU[user_drink]["cost"]
+        return resources
+
     def make_coffee(self):
+        is_making_coffee = True
         while True:
             #Ask for which drink
             chosen_drink =self.prompt()
-            if self.check_resources_availability[1]:
-                #Ask for coins
-                no_quarters, no_dimes, no_nickels, no_pennies =  self.aks_for_coins()
-                #Calculate total coins
-                total_coins = self.process_coins(no_quarters, no_dimes, no_nickels, no_pennies)
+            while is_making_coffee:
+                if chosen_drink == "report":
+                    #Show report
+                    print(f"{self.resources_str(resources)}")
+                elif chosen_drink == "end":
+                    is_making_coffee = False
+                else:
+                    if self.check_resources_availability(resources= resources, user_drink= chosen_drink)[1]:
+                        #Ask for coins
+                        no_quarters, no_dimes, no_nickels, no_pennies =  self.aks_for_coins()
+                        #Calculate total coins
+                        total_coins = self.process_coins(no_quarters, no_dimes, no_nickels, no_pennies)
+                        if self.check_enough_coins(total_coins, chosen_drink)[1]:
+                            #if user gave enough money
+                            print(f"{self.check_enough_coins(total_coins, chosen_drink)[0]}")
+                            print(f"Here is your {chosen_drink} {coffee_logo} Enjoy!")
+                            break
+                            
+                        else:
+                            #If not enough coins
+                            print(f"{self.check_enough_coins(total_coins, chosen_drink)[0]}")
+                            break
 
-            else:
-                print(f"{self.check_resources_availability[0]}")
+                    else:
+                        print(f"{self.check_resources_availability(resources= resources, user_drink= chosen_drink)[0]}")
+                        break
+            break
