@@ -114,7 +114,8 @@ class CoffeeMachine:
 
     def make_coffee(self):
         is_making_coffee = True
-        while True:
+        not_end = True
+        while not_end:
             #Ask for which drink
             chosen_drink =self.prompt()
             while is_making_coffee:
@@ -123,6 +124,7 @@ class CoffeeMachine:
                     print(f"{self.resources_str(resources)}")
                 elif chosen_drink == "end":
                     is_making_coffee = False
+                    not_end = False
                 else:
                     if self.check_resources_availability(resources= resources, user_drink= chosen_drink)[1]:
                         #Ask for coins
@@ -133,14 +135,14 @@ class CoffeeMachine:
                             #if user gave enough money
                             print(f"{self.check_enough_coins(total_coins, chosen_drink)[0]}")
                             print(f"Here is your {chosen_drink} {coffee_logo} Enjoy!")
-                            break
-                            
+                            self.update_resources(resources, user_drink= chosen_drink)
+
                         else:
                             #If not enough coins
                             print(f"{self.check_enough_coins(total_coins, chosen_drink)[0]}")
-                            break
+                            is_making_coffee = False
 
                     else:
                         print(f"{self.check_resources_availability(resources= resources, user_drink= chosen_drink)[0]}")
-                        break
-            break
+                        is_making_coffee = False
+
