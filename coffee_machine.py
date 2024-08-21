@@ -81,7 +81,7 @@ class CoffeeMachine:
         Returns:
             float: _Total value of coins_
         """
-        return (self.COINS["quarters"] * no_quarters) + (self.COINS["dimes"] * no_dimes) + (self.COINS["nickles"] * no_nickles) + (self.COINS["pennies"] * no_pennies)
+        return round((self.COINS["quarters"] * no_quarters) + (self.COINS["dimes"] * no_dimes) + (self.COINS["nickles"] * no_nickles) + (self.COINS["pennies"] * no_pennies), 2)
 
 
     def check_enough_coins(self, total_coins: float, user_drink: str)-> tuple:
