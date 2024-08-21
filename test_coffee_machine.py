@@ -1,5 +1,6 @@
 import pytest
 from coffee_machine import CoffeeMachine
+from unittest.mock import patch
 
 
 #Test resources str
@@ -12,3 +13,17 @@ class TestResourcesStr:
     resource_str = CoffeeMachine()
     def test_resource_str(self, resources, result):
         assert self.resource_str.resources_str(resources) == result
+
+#Test checking resource availability function
+# Test with espresso as drink
+@pytest.mark.parametrize("resources, chosen_drink, result", [
+    ({"water": 300, "milk": 200, "coffee": 100, "money": 0}, "espresso", ("Let's make espresso", True)),
+    ({"water": 40, "milk": 200, "coffee": 20, "money": 0}, "espresso", ("Sorry! There's not enough Water!", False)),
+    ({"water": 300, "milk": 200, "coffee": 10, "money": 0}, "espresso", ("Sorry! There's not enough Coffee!", False)),
+    ({"water": 45, "milk": 200, "coffee": 10, "money": 0}, "espresso", ("Sorry! There's not enough Water!", False)),
+    
+])
+class TestCheckResourcesAvailability:
+    espresso_drink = CoffeeMachine()
+    def test_check_resources_availability(self, resources, chosen_drink, result):
+        assert self.espresso_drink.check_resources_availability(resources, chosen_drink) == result
