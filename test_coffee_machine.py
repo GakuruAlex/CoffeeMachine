@@ -149,6 +149,7 @@ class TestUpdatingResourcesForCappuccino:
 # Test if all functions work well together
 class TestMakeCoffee:
     make_coffee_report = CoffeeMachine()
+    #Test whether make coffee displays report when input from user is 'report'
     def test_mock_user_asking_for_report(self, capsys):
         with patch("builtins.input", side_effect=['report', 'end']):
 
@@ -168,4 +169,9 @@ class TestMakeCoffee:
              self.make_coffee_report.make_coffee()
         captured = capsys.readouterr()
         assert captured.out == "Please insert coins: Cost $1.5\nHere is $1.35 in change.\nHere is your espresso "+coffee_logo+" Enjoy!\nWater: 200\nMilk: 200\nCoffee: 64\nMoney: $3.0\n"
+    def test_mock_user_asking_for_latte_then_report(self, capsys):
+        with patch('builtins.input', side_effect = ['latte', 10, 10, 10, 10, "report", "end"]):
+            self.make_coffee_report.make_coffee()
+        captured = capsys.readouterr()
+        assert captured.out == "Please insert coins: Cost $2.5\nHere is $1.60 in change.\nHere is your latte "+ coffee_logo + " Enjoy!\nWater: 0\nMilk: 50\nCoffee: 40\nMoney: $5.5\n"
 
