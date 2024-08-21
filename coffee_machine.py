@@ -58,7 +58,7 @@ class CoffeeMachine:
         else:
             if resources["water"] < MENU["espresso"]["ingredients"]["water"]:
                 missing_ingredient.append("water")
-            elif resources["coffee"] < MENU["espresso"]["ingredients"]["coffee"]:
+            if resources["coffee"] < MENU["espresso"]["ingredients"]["coffee"]:
                 missing_ingredient.append("coffee")
 
 
