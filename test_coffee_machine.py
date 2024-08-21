@@ -106,3 +106,28 @@ class TestEnoughCoinsForCappuccino:
     enough_coins_cappuccino = CoffeeMachine()
     def test_check_enough_coins_for_cappuccino(self, total_coins, chosen_drink, result):
         assert self.enough_coins_cappuccino.check_enough_coins(total_coins, chosen_drink) == result
+
+# Test updating resources
+# Test updating resources after making espresso
+
+@pytest.mark.parametrize("resources, chosen_drink, new_resources", [
+    ({"water": 300, "coffee": 100, "milk": 200, "money": 0}, "espresso", {"water":250 , "coffee":82 , "milk": 200, "money": 1.50}),
+    ({"water": 250, "coffee": 82, "milk": 200, "money": 1.50}, "espresso", {"water":200 , "coffee":64 , "milk": 200, "money": 3.00}),
+    ({"water": 100, "coffee": 30, "milk": 200, "money": 3.00}, "espresso", {"water":50 , "coffee":12 , "milk": 200, "money": 4.50}),
+])
+class TestUpdatingResourcesForEspresso:
+    espresso = CoffeeMachine()
+    def test_update_resources_after_making_espresso(self, resources, chosen_drink, new_resources):
+        assert self.espresso.update_resources(resources, chosen_drink) == new_resources
+
+#Test updating resources after making latte
+@pytest.mark.parametrize("resources, chosen_drink, new_resources", [
+    ({"water": 300, "coffee": 100, "milk": 200, "money": 0}, "latte", {"water": 100, "coffee": 76, "milk": 50, "money": 2.50}),
+    ({"water": 200, "coffee": 40, "milk": 150, "money": 2.50}, "latte", {"water": 0, "coffee": 16, "milk": 0, "money": 5.00}),
+    ({"water": 250, "coffee": 24, "milk": 170, "money": 0}, "latte", {"water": 50, "coffee": 0, "milk": 20, "money": 2.50}),
+
+])
+class TestUpdatingResourcesFroLatte:
+    latte = CoffeeMachine()
+    def test_update_resources_after_making_espresso(self, resources, chosen_drink, new_resources):
+        assert self.latte.update_resources(resources, chosen_drink) == new_resources
