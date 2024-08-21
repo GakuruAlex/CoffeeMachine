@@ -131,3 +131,16 @@ class TestUpdatingResourcesFroLatte:
     latte = CoffeeMachine()
     def test_update_resources_after_making_espresso(self, resources, chosen_drink, new_resources):
         assert self.latte.update_resources(resources, chosen_drink) == new_resources
+
+
+#Test updating resources after making cappuccino
+@pytest.mark.parametrize("resources, chosen_drink, new_resources", [
+    ({"water": 300, "coffee": 100, "milk": 200, "money": 0}, "cappuccino", {"water": 50, "coffee": 76, "milk": 100, "money": 3.00}),
+    ({"water": 250, "coffee": 40, "milk": 150, "money": 2.50}, "cappuccino", {"water": 0, "coffee": 16, "milk": 50, "money": 5.50}),
+    ({"water": 250, "coffee": 24, "milk": 170, "money": 0}, "cappuccino", {"water": 0, "coffee": 0, "milk": 70, "money": 3.00}),
+
+])
+class TestUpdatingResourcesFroLatte:
+    cappuccino = CoffeeMachine()
+    def test_update_resources_after_making_espresso(self, resources, chosen_drink, new_resources):
+        assert self.cappuccino.update_resources(resources, chosen_drink) == new_resources
