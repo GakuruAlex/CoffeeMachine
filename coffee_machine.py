@@ -36,20 +36,17 @@ class CoffeeMachine:
         """
         if user_drink != "espresso":
             for resource in resources:
-
                 if resources[resource] < MENU[user_drink]["ingredients"][resource]:
-                    return f"Sorry! There's not enough {resource.title()}!", False
-
-                else:
-                    return f"Let's make {user_drink}", True
+                        return f"Sorry! There's not enough {resource.title()}!", False
         else:
-            for resource in resources:
+            if resources["water"] < MENU["espresso"]["ingredients"]["water"]:
+                return f"Sorry! There's not enough Water!", False
+            elif resources["coffee"] < MENU["espresso"]["ingredients"]["coffee"]:
+                return f"Sorry! There's not enough Coffee!", False
 
-                if resources[resource] < MENU[user_drink]["ingredients"][resource]:
-                    return f"Sorry! There's not enough {resource.title()}!", False
 
-                else:
-                    return f"Let's make {user_drink}", True
+        return f"Let's make {user_drink}", True
+
 
     def process_coins(self,no_quarters: int, no_dimes: int, no_nickles: int, no_pennies: int)-> float:
         """_Calculate total value of coins_
