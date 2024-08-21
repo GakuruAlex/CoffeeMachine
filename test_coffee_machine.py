@@ -82,7 +82,7 @@ class TestProcessCoins:
 ])
 class TestEnoughCoinsForEspresso:
     enough_coins_espresso = CoffeeMachine()
-    def test_process_coins_for_espresso(self, total_coins, chosen_drink, result):
+    def test_check_enough_coins_for_espresso(self, total_coins, chosen_drink, result):
         assert self.enough_coins_espresso.check_enough_coins(total_coins, chosen_drink) == result
 
 #Check enough money for latte
@@ -91,7 +91,18 @@ class TestEnoughCoinsForEspresso:
     (2.5, "latte", ("No change.", True)),
     (1.4, "latte", ("Sorry! That's not enough money. Money refunded.", False)),
 ])
-class TestEnoughCoinsForEspresso:
+class TestEnoughCoinsForLatte:
     enough_coins_latte = CoffeeMachine()
-    def test_process_coins_for_espresso(self, total_coins, chosen_drink, result):
+    def test_check_enough_coins_for_latte(self, total_coins, chosen_drink, result):
         assert self.enough_coins_latte.check_enough_coins(total_coins, chosen_drink) == result
+
+#Check enough coins for cappuccino
+@pytest.mark.parametrize("total_coins, chosen_drink, result",[
+    (4.0, "cappuccino", ("Here is $1.00 in change.", True)),
+    (3.0, "cappuccino", ("No change.", True)),
+    (2.9, "cappuccino", ("Sorry! That's not enough money. Money refunded.", False)),
+])
+class TestEnoughCoinsForCappuccino:
+    enough_coins_cappuccino = CoffeeMachine()
+    def test_check_enough_coins_for_cappuccino(self, total_coins, chosen_drink, result):
+        assert self.enough_coins_cappuccino.check_enough_coins(total_coins, chosen_drink) == result
