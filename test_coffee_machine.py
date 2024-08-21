@@ -72,3 +72,15 @@ class TestProcessCoins:
     coins = CoffeeMachine()
     def test_process_coins(self, no_quarters, no_dimes, no_nickles, no_pennies, total_value):
         assert self.coins.process_coins(no_quarters, no_dimes, no_nickles, no_pennies) == total_value
+
+#Test check whether the coins are enough for specified drink
+#Check enough money for espresso
+@pytest.mark.parametrize("total_coins, chosen_drink, result",[
+    (4.0, "espresso", ("Here is $2.50 in change.", True)),
+    (1.5, "espresso", ("No change.", True)),
+    (1.4, "espresso", ("Sorry! That's not enough money. Money refunded.", False)),
+])
+class TestEnoughCoinsForEspresso:
+    enough_coins = CoffeeMachine()
+    def test_process_coins_for_espresso(self, total_coins, chosen_drink, result):
+        assert self.enough_coins.check_enough_coins(total_coins, chosen_drink) == result
