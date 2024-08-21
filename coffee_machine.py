@@ -52,9 +52,10 @@ class CoffeeMachine:
         """
         missing_ingredient = []
         if user_drink != "espresso":
-            for resource in resources:
-                if resources[resource] < MENU[user_drink]["ingredients"][resource]:
-                        missing_ingredient.append(resource)
+            for resource  in resources:
+                if resource != "money":
+                    if resources[resource] < MENU[user_drink]["ingredients"][resource]:
+                            missing_ingredient.append(resource)
         else:
             if resources["water"] < MENU["espresso"]["ingredients"]["water"]:
                 missing_ingredient.append("water")
