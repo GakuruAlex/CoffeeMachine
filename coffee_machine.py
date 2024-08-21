@@ -23,6 +23,22 @@ class CoffeeMachine:
         """
         return "Water: {water}\nMilk: {milk}\nCoffee: {coffee}\nMoney: ${money}".format(**resources)
 
+    def display_missing_resources(self, missing_resources: list) -> str:
+        """_Given a list of missing resources , title the strs in the list and return a formatted str_
+
+        Args:
+            missing_resources (list): _A list of missing resources_
+
+        Returns:
+            str: _A formatted string_
+        """
+        missing_resources = [resource.title() for resource in missing_resources]
+
+        missing = {1: "Sorry! There's not enough {}!",
+                   2: "Sorry! There's not enough {} and {}!",
+                   3: "Sorry! There's not enough {}, {} and {}!"}
+
+        return missing[len(missing_resources)].format(*missing_resources)
 
     def check_resources_availability(self,resources: dict, user_drink: str) -> tuple:
         """_Given available resources check if a given drink can be made_
@@ -34,18 +50,22 @@ class CoffeeMachine:
         Returns:
             tuple: _message to print and True If resources are enough otherwise False_
         """
+        missing_ingredient = []
         if user_drink != "espresso":
             for resource in resources:
                 if resources[resource] < MENU[user_drink]["ingredients"][resource]:
-                        return f"Sorry! There's not enough {resource.title()}!", False
+                        missing_ingredient.append(resource)
         else:
             if resources["water"] < MENU["espresso"]["ingredients"]["water"]:
-                return f"Sorry! There's not enough Water!", False
+                missing_ingredient.append("water")
             elif resources["coffee"] < MENU["espresso"]["ingredients"]["coffee"]:
-                return f"Sorry! There's not enough Coffee!", False
+                missing_ingredient.append("coffee")
 
 
-        return f"Let's make {user_drink}", True
+        if len(missing_ingredient) == 0:
+            return f"Let's make {user_drink}", True
+        else:
+            return self.display_missing_resources(missing_ingredient), False
 
 
     def process_coins(self,no_quarters: int, no_dimes: int, no_nickles: int, no_pennies: int)-> float:
