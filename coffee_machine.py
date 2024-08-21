@@ -21,7 +21,7 @@ class CoffeeMachine:
         Returns:
             str: _formatted resources_
         """
-        return "Water: {water} \nMilk: {milk} \nCoffee: {coffee} \nMoney: ${money}".format(**resources)
+        return "Water: {water}\nMilk: {milk}\nCoffee: {coffee}\nMoney: ${money}".format(**resources)
 
 
     def check_resources_availability(self,resources: dict, user_drink: str) -> tuple:
@@ -119,7 +119,6 @@ class CoffeeMachine:
         return resources
 
     def make_coffee(self):
-
 
         not_end = True
         while not_end:
