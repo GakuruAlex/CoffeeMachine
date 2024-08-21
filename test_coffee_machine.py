@@ -23,7 +23,23 @@ class TestResourcesStr:
     ({"water": 45, "milk": 200, "coffee": 10, "money": 0}, "espresso", ("Sorry! There's not enough Water and Coffee!", False)),
     
 ])
-class TestCheckResourcesAvailability:
+class TestEspressoResourcesAvailability:
     espresso_drink = CoffeeMachine()
     def test_check_resources_availability(self, resources, chosen_drink, result):
         assert self.espresso_drink.check_resources_availability(resources, chosen_drink) == result
+
+#Test with latte
+@pytest.mark.parametrize("resources, chosen_drink, result", [
+    ({"water": 300, "milk": 200, "coffee": 100, "money": 0}, "latte", ("Let's make latte", True)),
+    ({"water": 100, "milk": 200, "coffee": 100, "money": 2.5}, "latte", ("Sorry! There's not enough Water!", False)),
+    ({"water": 200, "milk": 100, "coffee": 100, "money": 2.5}, "latte", ("Sorry! There's not enough Milk!", False)),
+    ({"water": 300, "milk": 200, "coffee": 20, "money": 2.5}, "latte", ("Sorry! There's not enough Coffee!", False)),
+    ({"water": 100, "milk": 100, "coffee": 100, "money": 2.5}, "latte", ("Sorry! There's not enough Water and Milk!", False)),
+    ({"water": 100, "milk": 200, "coffee": 20, "money": 2.5}, "latte", ("Sorry! There's not enough Water and Coffee!", False)),
+    ({"water": 300, "milk": 100, "coffee": 20, "money": 2.5}, "latte", ("Sorry! There's not enough Milk and Coffee!", False)),
+    ({"water": 100, "milk": 100, "coffee": 20, "money": 2.5}, "latte", ("Sorry! There's not enough Water, Milk and Coffee!", False)),
+])
+class TestLatteResourcesAvailability:
+    latte_drink = CoffeeMachine()
+    def test_check_latte_resources_availability(self, resources, chosen_drink, result):
+        assert self.latte_drink.check_resources_availability(resources, chosen_drink) == result
