@@ -25,7 +25,7 @@ class TestResourcesStr:
 ])
 class TestEspressoResourcesAvailability:
     espresso_drink = CoffeeMachine()
-    def test_check_resources_availability(self, resources, chosen_drink, result):
+    def test_check_espresso_resources_availability(self, resources, chosen_drink, result):
         assert self.espresso_drink.check_resources_availability(resources, chosen_drink) == result
 
 #Test with latte
