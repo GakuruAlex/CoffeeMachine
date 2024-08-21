@@ -95,12 +95,13 @@ class CoffeeMachine:
             tuple: _Message and True if enough coins else False_
         """
         if MENU[user_drink]["cost"] > total_coins:
-            return f"Sorry! Thats not enough money. Money refunded.", False
+            return f"Sorry! That's not enough money. Money refunded.", False
         elif MENU[user_drink]['cost'] == total_coins:
             return f"No change.", True
         else:
             change = total_coins - MENU[user_drink]['cost']
             return "Here is ${:.2f} in change.".format(change), True
+
     def aks_for_coins(self, user_drink: str)-> tuple:
         """_Ask the user for coins_
 
