@@ -59,3 +59,16 @@ class TestCappuccinoResourcesAvailability:
     cappuccino_drink = CoffeeMachine()
     def test_check_cappuccino_resources_availability(self, resources, chosen_drink, result):
         assert self.cappuccino_drink.check_resources_availability(resources, chosen_drink) == result
+
+
+#Test process coins
+@pytest.mark.parametrize("no_quarters, no_dimes, no_nickles, no_pennies, total_value", [
+    (1, 1, 1, 1, 0.41),
+    (4, 5, 6, 8, 1.88),
+    (10, 10, 10, 10, 4.10),
+    (3, 3, 3, 3, 1.23),
+])
+class TestProcessCoins:
+    coins = CoffeeMachine()
+    def test_process_coins(self, no_quarters, no_dimes, no_nickles, no_pennies, total_value):
+        assert self.coins.process_coins(no_quarters, no_dimes, no_nickles, no_pennies) == total_value
