@@ -1,7 +1,7 @@
 import pytest
 from coffee_machine import CoffeeMachine
 from unittest.mock import patch
-
+from coffee_data import coffee_logo
 
 #Test resources str
 @pytest.mark.parametrize("resources, result", [
@@ -127,7 +127,7 @@ class TestUpdatingResourcesForEspresso:
     ({"water": 250, "coffee": 24, "milk": 170, "money": 0}, "latte", {"water": 50, "coffee": 0, "milk": 20, "money": 2.50}),
 
 ])
-class TestUpdatingResourcesFroLatte:
+class TestUpdatingResourcesForLatte:
     latte = CoffeeMachine()
     def test_update_resources_after_making_espresso(self, resources, chosen_drink, new_resources):
         assert self.latte.update_resources(resources, chosen_drink) == new_resources
@@ -140,7 +140,32 @@ class TestUpdatingResourcesFroLatte:
     ({"water": 250, "coffee": 24, "milk": 170, "money": 0}, "cappuccino", {"water": 0, "coffee": 0, "milk": 70, "money": 3.00}),
 
 ])
-class TestUpdatingResourcesFroLatte:
+class TestUpdatingResourcesForCappuccino:
     cappuccino = CoffeeMachine()
     def test_update_resources_after_making_espresso(self, resources, chosen_drink, new_resources):
         assert self.cappuccino.update_resources(resources, chosen_drink) == new_resources
+
+
+# Test if all functions work well together
+class TestMakeCoffee:
+    make_coffee_report = CoffeeMachine()
+    def test_mock_user_asking_for_report(self, capsys):
+        with patch("builtins.input", side_effect=['report', 'end']):
+
+             self.make_coffee_report.make_coffee()
+        captured = capsys.readouterr()
+        assert captured.out == "Water: 300\nMilk: 200\nCoffee: 100\nMoney: $0\n"
+
+    def test_make_coffee_for_espresso(self, capsys):
+        with patch("builtins.input", side_effect = ["espresso", 5, 10, 10, 10 , "end" ]):
+            self.make_coffee_report.make_coffee()
+        captured = capsys.readouterr()
+        assert captured.out ==  "Please insert coins: Cost $1.5\nHere is $1.35 in change.\nHere is your espresso "+coffee_logo+" Enjoy!\n"
+
+    def test_mock_user_asking_for_espresso_and_then_report(self, capsys):
+        with patch("builtins.input", side_effect=["espresso", 5, 10, 10, 10 ,"report", "end" ]):
+
+             self.make_coffee_report.make_coffee()
+        captured = capsys.readouterr()
+        assert captured.out == "Please insert coins: Cost $1.5\nHere is $1.35 in change.\nHere is your espresso "+coffee_logo+" Enjoy!\nWater: 200\nMilk: 200\nCoffee: 64\nMoney: $3.0\n"
+
